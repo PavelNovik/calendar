@@ -1,0 +1,19 @@
+{
+  "name": "calendar",
+  "version": "1.0.0",
+  "description": "The toDoList calendar",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PavelNovik/calendar.git"
+  },
+  "author": "NowikPawel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PavelNovik/calendar/issues"
+  },
+  "homepage": "https://github.com/PavelNovik/calendar#readme"
+}
