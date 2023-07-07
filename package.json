@@ -4,16 +4,36 @@
   "description": "The toDoList calendar",
   "main": "index.js",
   "scripts": {
+    "dev": "parcel src/index.html --open --port 1116",
+    "server": "json-server --watch src/db.json --port 8080",
+    "build": "rm -rf build/uikit && parcel build src/index.html --out-dir build/www",
+    "start": "concurrently \"npm run server\" \"npm run dev\"",
+    "predeploy": "npm run build",
+    "deploy": "vercel --prod",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PavelNovik/calendar.git"
   },
-  "author": "NowikPawel",
+  "author": "NowikPawel <brn2befree@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/PavelNovik/calendar/issues"
   },
-  "homepage": "https://github.com/PavelNovik/calendar#readme"
+  "homepage": "https://github.com/PavelNovik/calendar#readme",
+  "dependencies": {
+    "@fullcalendar/bootstrap5": "^6.1.8",
+    "@fullcalendar/core": "^6.1.8",
+    "bootstrap": "^5.3.0",
+    "bootstrap-icons": "^1.10.5",
+    "fullcalendar": "^6.1.8",
+    "json-server": "^0.17.3"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "parcel-bundler": "^1.12.5",
+    "sass": "^1.63.6",
+    "vercel": "^31.0.1"
+  }
 }
