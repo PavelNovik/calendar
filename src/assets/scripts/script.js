@@ -6,60 +6,75 @@ import bootstrap5Plugin from '@fullcalendar/bootstrap5';
 import { dA } from '@fullcalendar/core/internal-common';
 import { preventDefault } from '@fullcalendar/core/internal';
 
-document.addEventListener('DOMContentLoaded', function () {
-  const calendarEl = document.getElementById('calendar');
-  const calendar = new FullCalendar.Calendar(calendarEl, {
-    eventSources: [
-      {
-        events: function (info, successCallback, failureCallback) {
-          fetch('http://localhost:8080/events')
-            .then((response) => response.json())
-            .then((result) => {
-              successCallback(result);
-            });
-        },
-        // color: 'rgb(25, 10, 226)', // an option!
-        // textColor: 'white', // an option!
+// document.addEventListener('DOMContentLoaded', function () {
+const calendarEl = document.getElementById('calendar');
+const calendar = new FullCalendar.Calendar(calendarEl, {
+  eventSources: [
+    {
+      events: function (info, successCallback, failureCallback) {
+        fetch('http://localhost:8080/events')
+          .then((response) => response.json())
+          .then((result) => {
+            successCallback(result);
+          });
       },
-    ],
-    plugins: [bootstrap5Plugin],
-    themeSystem: 'bootstrap5',
-    windowResizeDelay: 50,
-    initialView: 'dayGridMonth',
-    headerToolbar: {
-      center: 'multiMonthYear,dayGridMonth,dayGridWeek,dayGridDay',
+      // color: 'rgb(25, 10, 226)', // an option!
+      // textColor: 'white', // an option!
     },
-    firstDay: 1,
-    showNonCurrentDates: false,
-    weekNumbers: true,
-    selectable: true,
+  ],
+  plugins: [bootstrap5Plugin],
+  themeSystem: 'bootstrap5',
+  windowResizeDelay: 50,
+  initialView: 'dayGridMonth',
+  headerToolbar: {
+    center: 'multiMonthYear,dayGridMonth,dayGridWeek,dayGridDay',
+  },
+  firstDay: 1,
+  showNonCurrentDates: false,
+  weekNumbers: true,
+  selectable: true,
 
-    eventClick: function (data) {
-      console.log(data.event.title);
-      console.log(data.event.id);
-    },
+  eventMouseEnter: function (mouseEnterInfo) {
+    console.log(mouseEnterInfo);
+    console.log(mouseEnterInfo.event.id);
+    console.log(mouseEnterInfo.el);
+    console.log(mouseEnterInfo.jsEvent);
+    console.log(mouseEnterInfo.view);
+  },
 
-    select: function (selectionInfo) {
-      $('#dialog').dialog('open');
-      $('#start').val(selectionInfo.startStr);
-      $('#end').val(selectionInfo.endStr);
-      console.log(
-        'selection is ',
-        selectionInfo.startStr,
-        ' to ',
-        selectionInfo.endStr
-      );
-    },
-    dateClick: function (date) {
-      // console.log(date);
-      const clickDate = date.dateStr;
-      console.log('clicked on ' + clickDate);
-      $('#dialog').dialog('open');
-      $('#start').val(clickDate);
-    },
-  });
-  calendar.render();
+  eventClick: function (data) {
+    console.log(data.event.title);
+    console.log(data.event.id);
+    fetch(`http://localhost:8080/events/${data.event.id}`, {
+      method: 'DELETE',
+    })
+      .then(() => data.event.remove())
+      .catch((error) => console.error(error));
+    // data.event.remove();
+  },
+
+  select: function (selectionInfo) {
+    $('#dialog').dialog('open');
+    $('#start').val(selectionInfo.startStr);
+    $('#end').val(selectionInfo.endStr);
+    console.log(
+      'selection is ',
+      selectionInfo.startStr,
+      ' to ',
+      selectionInfo.endStr
+    );
+  },
+  dateClick: function (date) {
+    // console.log(date);
+    const clickDate = date.dateStr;
+    console.log('clicked on ' + clickDate);
+    $('#dialog').dialog('open');
+    $('#start').val(clickDate);
+  },
 });
+calendar.render();
+// });
+
 $(function () {
   $('#dialog').dialog({
     autoOpen: false,
@@ -75,8 +90,39 @@ $(function () {
     dateFormat: 'yy-mm-dd',
   });
 
+  function clearVal() {
+    $('#title').val('');
+  }
+
   $('form').submit(function (e) {
     e.preventDefault();
-    console.log(e.target);
+    const event = {
+      title: $('#title').val(),
+      start: $('#start').val(),
+      end: $('#end').val(),
+    };
+    if ($('#title').val()) {
+      fetch('http://localhost:8080/events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(event),
+      })
+        .then((response) => {
+          // console.log(response);
+          clearVal();
+          console.log(calendar);
+          calendar.addEvent({
+            title: event.title,
+            start: event.start,
+            end: event.end,
+          });
+          $('#dialog').dialog('close');
+        })
+        .catch((err) => console.error('Error', err));
+    }
+
+    // $('#dialog').dialog('close');
   });
 });
