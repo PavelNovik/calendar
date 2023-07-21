@@ -1,13 +1,6 @@
 {
   "events": [
     {
-      "id": 1,
-      "title": "Event 1",
-      "description": "Something enteresting",
-      "start": "2023-07-01",
-      "end": "2023-07-01"
-    },
-    {
       "id": 2,
       "title": "Event 2",
       "description": "Something enteresting",
@@ -15,30 +8,39 @@
       "end": "2023-07-04"
     },
     {
-      "id": 3,
-      "title": "Event 3",
-      "description": "Something enteresting",
-      "start": "2023-07-06",
-      "end": "2023-07-08"
+      "title": "event1",
+      "start": "2023-07-01",
+      "end": "2023-07-02",
+      "description": "",
+      "id": 4
     },
     {
-      "id": 4,
-      "title": "Event 4",
-      "description": "Something enteresting",
-      "start": "2023-07-06",
-      "end": "2023-07-06"
+      "title": "sadd",
+      "start": "2023-07-05",
+      "end": "2023-07-07",
+      "description": "saddsa",
+      "id": 7
     },
     {
-      "title": "Нужно на работу",
+      "title": "sdafafs",
       "start": "2023-07-13",
       "end": "2023-07-14",
-      "id": 5
+      "description": "afsfdadsa",
+      "id": 8
     },
     {
-      "title": "фывфв",
-      "start": "2023-07-16",
-      "end": "2023-07-17",
-      "id": 6
+      "title": "dasda",
+      "start": "2023-07-20",
+      "end": "2023-07-21",
+      "description": "sadad",
+      "id": 9
+    },
+    {
+      "title": "sdasdad",
+      "start": "2023-07-19",
+      "end": "2023-07-20",
+      "description": "asfafsa",
+      "id": 10
     }
   ]
 }

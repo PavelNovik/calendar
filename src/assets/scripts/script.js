@@ -1,3 +1,5 @@
+'use strict';
+
 // import the third-party stylesheets directly from your JS
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css'; // needs additional webpack config!
@@ -23,6 +25,7 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     },
   ],
   plugins: [bootstrap5Plugin],
+  editable: true,
   themeSystem: 'bootstrap5',
   windowResizeDelay: 50,
   initialView: 'dayGridMonth',
@@ -34,12 +37,17 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
   weekNumbers: true,
   selectable: true,
 
-  eventMouseEnter: function (mouseEnterInfo) {
-    console.log(mouseEnterInfo);
-    console.log(mouseEnterInfo.event.id);
-    console.log(mouseEnterInfo.el);
-    console.log(mouseEnterInfo.jsEvent);
-    console.log(mouseEnterInfo.view);
+  eventMouseEnter: function (date) {
+    // console.log(mouseEnterInfo);
+    console.log(date.event.id);
+    fetch(`http://localhost:8080/events?title_like=${date.event.title}`, {
+      method: 'GET',
+    })
+      .then((resp) => resp.json())
+      .then(([result]) => console.log(result.id));
+    // console.log(mouseEnterInfo.el);
+    // console.log(mouseEnterInfo.jsEvent);
+    // console.log(mouseEnterInfo.view);
   },
 
   eventClick: function (data) {
@@ -51,6 +59,28 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
       .then(() => data.event.remove())
       .catch((error) => console.error(error));
     // data.event.remove();
+  },
+
+  eventResize: function (date) {
+    const event = {
+      end: date.event.endStr,
+    };
+
+    if (
+      !confirm(
+        `${date.event.title} end is now ${date.event.endStr}. Is this okay?`
+      )
+    ) {
+      date.revert();
+    } else {
+      fetch(`http://localhost:8080/events/${date.event.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(event),
+      }).catch((error) => console.error(error));
+    }
   },
 
   select: function (selectionInfo) {
@@ -70,6 +100,31 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     console.log('clicked on ' + clickDate);
     $('#dialog').dialog('open');
     $('#start').val(clickDate);
+  },
+
+  eventDrop: function (date) {
+    const event = {
+      start: date.event.startStr,
+      end: date.event.endStr,
+    };
+
+    if (
+      !confirm(
+        `${
+          date.event.title
+        } was dropped on ${date.event.start.toISOString()}. Are you sure about this change?`
+      )
+    ) {
+      date.revert();
+    } else {
+      fetch(`http://localhost:8080/events/${date.event.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(event),
+      }).catch((error) => console.error(error));
+    }
   },
 });
 calendar.render();
@@ -100,6 +155,7 @@ $(function () {
       title: $('#title').val(),
       start: $('#start').val(),
       end: $('#end').val(),
+      description: $('#description').val(),
     };
     if ($('#title').val()) {
       fetch('http://localhost:8080/events', {
@@ -110,14 +166,15 @@ $(function () {
         body: JSON.stringify(event),
       })
         .then((response) => {
-          // console.log(response);
           clearVal();
           console.log(calendar);
           calendar.addEvent({
             title: event.title,
             start: event.start,
             end: event.end,
+            description: event.description,
           });
+
           $('#dialog').dialog('close');
         })
         .catch((err) => console.error('Error', err));
