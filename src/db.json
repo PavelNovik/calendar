@@ -1,46 +1,25 @@
 {
   "events": [
     {
-      "id": 2,
-      "title": "Event 2",
-      "description": "Something enteresting",
-      "start": "2023-07-03",
-      "end": "2023-07-04"
+      "title": "Today",
+      "start": "2023-07-22",
+      "end": "2023-07-23",
+      "description": "Minsk capital",
+      "id": 1
     },
     {
-      "title": "event1",
-      "start": "2023-07-01",
-      "end": "2023-07-02",
-      "description": "",
-      "id": 4
+      "title": "Yesterday",
+      "start": "2023-07-21",
+      "end": "2023-07-22",
+      "description": "1",
+      "id": 2
     },
     {
-      "title": "sadd",
-      "start": "2023-07-05",
-      "end": "2023-07-07",
-      "description": "saddsa",
-      "id": 7
-    },
-    {
-      "title": "sdafafs",
-      "start": "2023-07-13",
-      "end": "2023-07-14",
-      "description": "afsfdadsa",
-      "id": 8
-    },
-    {
-      "title": "dasda",
-      "start": "2023-07-20",
-      "end": "2023-07-21",
-      "description": "sadad",
-      "id": 9
-    },
-    {
-      "title": "sdasdad",
-      "start": "2023-07-19",
-      "end": "2023-07-20",
-      "description": "asfafsa",
-      "id": 10
+      "title": "Tomorrow",
+      "start": "2023-07-23",
+      "end": "2023-07-24",
+      "description": "2",
+      "id": 3
     }
   ]
 }

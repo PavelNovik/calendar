@@ -37,18 +37,7 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
   weekNumbers: true,
   selectable: true,
 
-  eventMouseEnter: function (date) {
-    // console.log(mouseEnterInfo);
-    console.log(date.event.id);
-    fetch(`http://localhost:8080/events?title_like=${date.event.title}`, {
-      method: 'GET',
-    })
-      .then((resp) => resp.json())
-      .then(([result]) => console.log(result.id));
-    // console.log(mouseEnterInfo.el);
-    // console.log(mouseEnterInfo.jsEvent);
-    // console.log(mouseEnterInfo.view);
-  },
+  eventMouseEnter: function (date) {},
 
   eventClick: function (data) {
     console.log(data.event.title);
@@ -58,7 +47,6 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     })
       .then(() => data.event.remove())
       .catch((error) => console.error(error));
-    // data.event.remove();
   },
 
   eventResize: function (date) {
@@ -87,17 +75,10 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     $('#dialog').dialog('open');
     $('#start').val(selectionInfo.startStr);
     $('#end').val(selectionInfo.endStr);
-    console.log(
-      'selection is ',
-      selectionInfo.startStr,
-      ' to ',
-      selectionInfo.endStr
-    );
   },
   dateClick: function (date) {
-    // console.log(date);
     const clickDate = date.dateStr;
-    console.log('clicked on ' + clickDate);
+
     $('#dialog').dialog('open');
     $('#start').val(clickDate);
   },
@@ -110,9 +91,7 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
 
     if (
       !confirm(
-        `${
-          date.event.title
-        } was dropped on ${date.event.start.toISOString()}. Are you sure about this change?`
+        `${date.event.title} was dropped on ${date.event.startStr}. Are you sure about this change?`
       )
     ) {
       date.revert();
@@ -147,6 +126,7 @@ $(function () {
 
   function clearVal() {
     $('#title').val('');
+    $('#description').val('');
   }
 
   $('form').submit(function (e) {
@@ -165,21 +145,20 @@ $(function () {
         },
         body: JSON.stringify(event),
       })
-        .then((response) => {
+        .then((resp) => {
           clearVal();
-          console.log(calendar);
-          calendar.addEvent({
-            title: event.title,
-            start: event.start,
-            end: event.end,
-            description: event.description,
-          });
+
+          // calendar.addEvent({
+          //   title: event.title,
+          //   start: event.start,
+          //   end: event.end,
+          //   description: event.description,
+          // });
+          calendar.refetchEvents();
 
           $('#dialog').dialog('close');
         })
         .catch((err) => console.error('Error', err));
     }
-
-    // $('#dialog').dialog('close');
   });
 });
