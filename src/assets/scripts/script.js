@@ -5,10 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css'; // needs additional webpack config!
 
 import bootstrap5Plugin from '@fullcalendar/bootstrap5';
-import { dA } from '@fullcalendar/core/internal-common';
-import { preventDefault } from '@fullcalendar/core/internal';
 
-// document.addEventListener('DOMContentLoaded', function () {
 const calendarEl = document.getElementById('calendar');
 const calendar = new FullCalendar.Calendar(calendarEl, {
   eventSources: [
@@ -28,20 +25,23 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
   editable: true,
   themeSystem: 'bootstrap5',
   windowResizeDelay: 50,
+  dayMaxEventRows: true,
   initialView: 'dayGridMonth',
   headerToolbar: {
     center: 'multiMonthYear,dayGridMonth,dayGridWeek,dayGridDay',
   },
   firstDay: 1,
-  showNonCurrentDates: false,
+  // showNonCurrentDates: false,
   weekNumbers: true,
   selectable: true,
 
-  eventMouseEnter: function (date) {},
+  eventDidMount: function (date) {
+    tippy(date.el, {
+      content: date.event.extendedProps.description,
+    });
+  },
 
   eventClick: function (data) {
-    console.log(data.event.title);
-    console.log(data.event.id);
     fetch(`http://localhost:8080/events/${data.event.id}`, {
       method: 'DELETE',
     })
@@ -70,6 +70,8 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
       }).catch((error) => console.error(error));
     }
   },
+
+  eventBackgroundColor: 'red',
 
   select: function (selectionInfo) {
     $('#dialog').dialog('open');

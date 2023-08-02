@@ -20,6 +20,27 @@
       "end": "2023-07-24",
       "description": "2",
       "id": 3
+    },
+    {
+      "title": "Current Date",
+      "start": "2023-08-02",
+      "end": "2023-08-03",
+      "description": "It's the time when I writing this text/",
+      "id": 4
+    },
+    {
+      "title": "The next day",
+      "start": "2023-08-03",
+      "end": "2023-08-04",
+      "description": "When I will work tomorrow",
+      "id": 5
+    },
+    {
+      "title": "The day before",
+      "start": "2023-08-01",
+      "end": "2023-08-02",
+      "description": "It is the day when I worked yeasterday",
+      "id": 6
     }
   ]
 }
